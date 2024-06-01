@@ -157,41 +157,31 @@ Return 0 on `android::ExynosCameraConfigurations::checkJpegSqueezerEnable` from 
 Force 100% quality factor + Use `QuramJpegWrapper` in `libnode-jni.so` (Required for auto mode)
 
 ```asm
-; never use `JpegSqueezerWrapper::encodeJPEGToBuffer`
-;; Function `ExternalJpegNode::encodeYuvToJpeg`
 ; original
---> 0x0016b758 984240f9 ldr x24,[x20, #0x80]
-    0x0016b75c e80000b4 cbz x8,0x0016b778
-    0x0016b760 000700b0 adrp x0,0x24c000
-; patched
---> 0x0016b758 180080d2 mov x24,#0x0
-    0x0016b75c e80000b4 cbz x8,0x0016b778
-    0x0016b760 000700b0 adrp x0,0x24c000
+-->     0016e098 a6 22 41 29     ldp        w6,w8,[x21, #0x8]
+        0016e09c 80 42 40 f9     ldr        x0,[x20, #0x80]
+        0016e0a0 c1 06 40 f9     ldr        x1,[x22, #0x8]
+        0016e0a4 62 7a 40 b9     ldr        w2,[x19, #0x78]
+        0016e0a8 63 82 40 b9     ldr        w3,[x19, #0x80]
+        0016e0ac a4 16 42 29     ldp        w4,w5,[x21, #0x10]
+        0016e0b0 e8 0b 00 b9     str        w8,[sp, #0x8]=>local_138
+        0016e0b4 e8 63 01 91     add        x8,sp,#0x58
+        0016e0b8 e7 63 00 91     add        x7,sp,#0x18
+        0016e0bc e8 03 00 f9     str        x8,[sp]=>local_140
+        0016e0c0 64 69 ff 97     bl         JpegSqueezerWrapper::encodeJPEGToBuffer
 
-; always use `QuramJpegWrapper::encodeJPEGToBuffer`
-; original
---> 0x0016b870 29010034 cbz w9,0x0016b894
-    0x0016b874 21070090 adrp x1,0x24f000
-    0x0016b878 22070090 adrp x2,0x24f000
-    0x0016b87c 23070090 adrp x3,0x24f000
 ; patched
---> 0x0016b870 1f2003d5 nop
-    0x0016b874 21070090 adrp x1,0x24f000
-    0x0016b878 22070090 adrp x2,0x24f000
-    0x0016b87c 23070090 adrp x3,0x24f000
-
-; force 100% quality factor for `QuramJpegWrapper::encodeJPEGToBuffer`
-; original
---> 0x0016b8a4 a41e4129 ldp w4,w7,[x21, #0x8]
-    0x0016b8a8 e5430091 add x5,sp,#0x10
-    0x0016b8ac e6830091 add x6,sp,#0x20
-    0x0016b8b0 cc68ff97 bl 0x00145be0
-; patched
---> 0x0016b8a4 870c8052 mov w7,#0x64
-    0x0016b8a8 e5430091 add x5,sp,#0x10
-    0x0016b8ac e6830091 add x6,sp,#0x20
-    0x0016b8b0 cc68ff97 bl 0x00145be0
-;;
+-->     0016e098 88 0c 80 52     mov        w8,#0x64
+        0016e09c 80 42 40 f9     ldr        x0,[x20, #0x80]
+        0016e0a0 c1 06 40 f9     ldr        x1,[x22, #0x8]
+        0016e0a4 62 7a 40 b9     ldr        w2,[x19, #0x78]
+        0016e0a8 63 82 40 b9     ldr        w3,[x19, #0x80]
+        0016e0ac a4 16 42 29     ldp        w4,w5,[x21, #0x10]
+        0016e0b0 e8 0b 00 b9     str        w8,[sp, #0x8]=>local_138
+        0016e0b4 e8 63 01 91     add        x8,sp,#0x58
+        0016e0b8 e7 63 00 91     add        x7,sp,#0x18
+        0016e0bc e8 03 00 f9     str        x8,[sp]=>local_140
+        0016e0c0 64 69 ff 97     bl         JpegSqueezerWrapper::encodeJPEGToBuffer
 ```
 
 ### Idle Inactivity Timeout
